@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>WebSocket</title>
+</head>
+
+<body>
+  <h1>WebSocket</h1>
+  <p>Envoie des messages par WebSocket.</p>
+  <button>send</button>
+  <script>
+    let numClick = 0
+    const ws = new WebSocket('ws://localhost:1337');
+    ws.addEventListener('open', () => {
+      ws.send(JSON.stringify({ message: 'Hello!' }))
+    })
+    ws.addEventListener('message', event => {
+      let a = document.createElement("p")
+      a.textContent = event.data
+      document.querySelector('body').appendChild(a)
+      console.log(event.data)
+    })
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('button').addEventListener('click', () => {
+        ws.send(JSON.stringify({ message: 'Hello ' + ++numClick }))
+      })
+    })
+  </script>
+</body>
+
+</html>

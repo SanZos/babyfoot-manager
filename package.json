@@ -1,0 +1,11 @@
+{
+  "name": "babyfoot",
+  "version": "1.0.0",
+  "description": "BabyFoot Manager est une application web de type RIA permettant de créer des parties de babyfoot. Sa particularité sera de pouvoir créer des parties de manière collaborative.  ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Antonin 'SanZos' DUBOIS",
+  "license": "MIT"
+}
