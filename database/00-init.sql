@@ -1,2 +1,16 @@
-CREATE DATABASE BabyfootManager;
-\c BabyfootManager
+-- UP
+CREATE TABLE migration (
+    file VARCHAR(255) NOT NULL,
+    up TEXT NOT NULL,
+    down TEXT NOT NULL
+);
+
+CREATE TABLE partie (
+    id SERIAL PRIMARY KEY NOT NULL,
+    nom VARCHAR(255) NOT NULL,
+    fini BOOLEAN DEFAULT FALSE
+);
+
+-- DOWN
+DROP TABLE partie;
+DROP TABLE migration;
