@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+  <link rel='stylesheet' href='styles/main.css'>
+  <title>Babyfoot manager</title>
+</head>
+
+<body>
+
+  <header>
+    <h1>Babyfoot manager</h1>
+  </header>
+  <main id='app'> 
+    <form id='addGame' action='addGame' name='addGame'>
+      <label for="game">Ajouter une nouvelle partie : </label><input id='game' autocomplete='off' /><input type="submit" class="round" value="Ajouter" />
+    </form>
+    <fieldset id='displayGames'>
+      <legend><span>Liste des parties</span><span id="nbGames"></span></legend>
+    </fieldset>
+  </main>
+
+  <script src="scripts/client.js"></script>
+</body>
+
+</html>

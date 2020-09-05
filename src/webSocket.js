@@ -4,6 +4,11 @@
 const crypto = require('crypto')
 
 class WebSocketServer {
+  /**
+   * Gestion de l'upgrade en websocket
+   * @param {IncomingMessage} req requête HTTP
+   * @param {Socket} socket websocket
+   */
   static handshake (req, socket) {
     const acceptKey = req.headers['sec-websocket-key']
     const hash = WebSocketServer.generateAcceptValue(acceptKey)
@@ -12,15 +17,10 @@ class WebSocketServer {
       'Connection: Upgrade\r\n' +
       `Sec-WebSocket-Accept: ${hash} \r\n` +
       '\r\n')
-    socket.on('data', data => {
-      const response = WebSocketServer.parseFrame(data)
-      if (response) {
-        console.log(response)
-        socket.write(WebSocketServer.constructReply({ message: 'Réponse de ouf', detail: response.message }))
-      } else if (response === null) {
-        console.log('WebSocket connection closed by the client.')
-      }
-    })
+
+    WebSocketServer.registerSocket(socket, acceptKey)
+
+    return socket
   }
 
   /**
@@ -111,6 +111,33 @@ class WebSocketServer {
     buffer.write(json, payloadOffset)
     return buffer
   }
+
+  /**
+   * On enregistre les websockets pour garder une trace
+   * @param {Socket} socket websocket
+   * @param {String} acceptKey clé unique envoyer par le client
+   */
+  static registerSocket (socket, acceptKey) {
+    WebSocketServer.registeredWebsocket[acceptKey] = socket
+    socket.on('timeout', data => {
+      console.log(`Timeout WebSocket ${acceptKey} connection closed.`)
+      socket.destroy()
+      delete WebSocketServer.registeredWebsocket[acceptKey]
+    })
+    socket.on('data', data => {
+      const response = WebSocketServer.parseFrame(data)
+      if (response) {
+        socket.write(WebSocketServer.constructReply({ message: 'Réponse de ouf', detail: response.message }))
+      } else if (response === null) {
+        delete WebSocketServer.registeredWebsocket[acceptKey]
+        socket.end()
+        socket.destroy()
+        console.log(`WebSocket ${acceptKey} connection closed.`)
+      }
+    })
+  }
 }
+
+WebSocketServer.registeredWebsocket = {}
 
 module.exports = WebSocketServer

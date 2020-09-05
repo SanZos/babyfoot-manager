@@ -1,0 +1,41 @@
+body {
+  background-color: #242933;
+  color: #D8DEE9;
+  height: 100vh;
+  font-family: 'Roboto';
+  margin: 0px 10px;
+  justify-content: center;
+  display: grid;
+  /* grid-template-rows: 1fr 2fr; */
+  grid-template-columns: 1.5fr 1fr;
+  grid-template-rows: 80px 1fr;
+  gap: 1rem;
+  grid-template-areas:
+      "header header"
+      "main chat";
+}
+
+header {
+  grid-area: header;
+	text-align: center;
+}
+
+main {
+  grid-area: main;
+  margin-left: 5%;
+  padding: 1em;
+  background-color: #2E3440;
+  border-radius: 5px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  height: fit-content;
+}
+
+#game {
+  background-color: #434C5E;
+  color: #D8DEE9;
+  border-color: none;
+}
+
+.chat {
+  grid-area: chat;
+}
