@@ -14,9 +14,10 @@
   <header>
     <h1>Babyfoot manager</h1>
   </header>
-  <main id='app'> 
+  <main id='app' class="round">
     <form id='addGame' action='addGame' name='addGame'>
-      <label for="game">Ajouter une nouvelle partie : </label><input id='game' autocomplete='off' /><input type="submit" class="round" value="Ajouter" />
+      <input placeholder="Nouvelle partie" class="round" id='game' autocomplete='off' />
+      <button class="round validate">Ajouter</button>
     </form>
     <fieldset id='displayGames'>
       <legend><span>Liste des parties</span><span id="nbGames"></span></legend>

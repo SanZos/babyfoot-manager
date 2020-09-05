@@ -36,7 +36,7 @@ const routeur = (filePath) => {
   } else return [null, null]
 }
 
-const WebSocketServer = require('./webSocket')
+const WebSocketServer = require('./websocket/server')
 
 srv.on('upgrade', (req, socket, head) => {
   if (req.headers.upgrade !== 'websocket') {
