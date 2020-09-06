@@ -7,8 +7,8 @@ CREATE TABLE migration (
 
 CREATE TABLE partie (
     id SERIAL PRIMARY KEY NOT NULL,
-    nom VARCHAR(255) NOT NULL,
-    fini BOOLEAN DEFAULT FALSE
+    name VARCHAR(255) NOT NULL,
+    finished BOOLEAN DEFAULT FALSE
 );
 
 -- DOWN

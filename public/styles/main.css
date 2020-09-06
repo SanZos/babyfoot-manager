@@ -15,6 +15,10 @@ body {
       "main chat";
 }
 
+legend {
+  width: 100%;
+}
+
 header {
   grid-area: header;
 	text-align: center;
@@ -33,9 +37,17 @@ input::placeholder {
   color: #D8DEE9;
 }
 
-button {
-  background-color: #434C5E;
-  color: #D8DEE9;
+img.small {
+  width: 24px;
+  cursor: pointer;
+}
+
+img.left {
+  float: left;
+}
+
+img.right {
+  float: right;
 }
 
 main {
@@ -51,8 +63,7 @@ main {
   margin-left: 5%;
   padding: 1em;
   background-color: #2E3440;
-  min-height: 20vh;
-  max-height: 80vh;
+  height: 70vh;
 }
 
 #username {
@@ -64,9 +75,8 @@ input#username {
 }
 
 #chatMessage {
-  height: 70%;
-  max-height: 80%;
-  overflow-x: auto;
+  height: calc(100% - 80px);
+  overflow-y: auto;
   border: 1px solid #242933;
   background-color: #4C566A;
 }
@@ -98,6 +108,27 @@ input#username {
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
 
+.game {
+  height: 24px;
+  line-height: 24px;
+}
+
+.running {
+  filter: grayscale(1);
+}
+
+#nbGames {
+  position: relative;
+  left: calc(50% - 110px);
+  background-color: #242933;
+  color: #8FBCBB;
+  height: 24px;
+  line-height: 24px;
+  width: 24px;
+  text-align: center;
+  display: inline-block;
+}
+
 @media only screen and (max-width: 1024px) {
   body {
     grid-template-columns: 1fr;
@@ -112,9 +143,11 @@ input#username {
     margin-left: 5%;
     margin-right: 5%;
   }
+
   #chat {
     margin-left: 5%;
     margin-right: 5%;
+    height: 50vh;
   }
   
 }

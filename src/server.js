@@ -8,14 +8,18 @@ const mime = {
   '.json': 'application/json',
   '.html': 'text/html',
   '.css': 'text/css',
-  '.ico': 'image/x-icon'
+  '.ico': 'image/x-icon',
+  '.svg': 'image/svg+xml'
 }
+
+// gestion de la base de donnée
+const Database = require('./database')
+const db = new Database(configurationFile.database)
 
 const http = require('http')
 const fs = require('fs')
 const path = require('path')
 
-// Create an HTTP server
 const srv = http.createServer((req, res) => {
   const [type, file] = routeur(req.url)
   if (type === null || file === null) {
@@ -37,6 +41,7 @@ const routeur = (filePath) => {
 }
 
 const WebSocketServer = require('./websocket/server')
+WebSocketServer.database = db
 
 srv.on('upgrade', (req, socket, head) => {
   if (req.headers.upgrade !== 'websocket') {
@@ -54,5 +59,4 @@ configurationFile.dev.watch.forEach(w => {
   })
 })
 
-// now that server is running
 srv.listen(configurationFile.server.port, '0.0.0.0', () => { })

@@ -14,19 +14,19 @@
   <header>
     <h1>Babyfoot manager</h1>
   </header>
-  <main id="app" class=" shadow">
-    <form id="addGame" action="addGame" name="addGame">
+  <main id="app" class="round shadow">
+    <div id="addGame">
       <input placeholder="Nouvelle partie" class="round" id="game" autocomplete="off" />
-    </form>
+    </div>
     <fieldset id="displayGames">
-      <legend><span>Liste des parties</span><span id="nbGames"></span></legend>
+      <legend><span>Liste des parties</span><span class="round" id="nbGames"></span></legend>
     </fieldset>
   </main>
   <div id="chat" class="round shadow">
     <div class="title">Chat</div>
     Utilisateur : <div id="username"></div>
-    <div id="chatMessage"></div>
-    <input type="text" placeholder="message" id="message"/>
+    <div id="chatMessage" class="round"></div>
+    <input type="text" placeholder="Message" id="message" class="round"/>
   </div>
 
   <script src="scripts/client.js"></script>

@@ -1,9 +1,11 @@
-/* global WebSocket, location, crypto */
+/* global WebSocket, location, crypto, confirm */
 
 let ws
+let nbUnfinished = 0
+const games = new Map()
 const uuid = CreateUUID()
-const game = []
 const timeout = 2000
+const gameHolder = document.querySelector('#displayGames')
 const chatHolder = document.querySelector('#chatMessage')
 
 let username = `Utilisateur-${uuid}`
@@ -31,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const gameName = document.querySelector('input#game').value
       if (gameName !== '') {
         const gameObject = { gameName: gameName, finished: false }
-        game.push(gameObject)
         sendGameToWebsocket(gameObject)
       }
     }
@@ -47,27 +48,46 @@ function CreateUUID () {
 function connect () {
   ws = new WebSocket(`ws://${document.location.host}`)
   ws.addEventListener('open', () => {
-    ws.send(JSON.stringify({ socketId: uuid, type: 'init', username: username }))
+    wsSend({ socketId: uuid, type: 'init', username: username })
     keepAlive()
   })
 
   ws.addEventListener('message', event => {
     console.log(event.data)
     try {
-      const data = JSON.parse(event.data)
-      switch (data.type) {
+      const response = JSON.parse(event.data)
+      switch (response.type) {
         case 'reload':
-          console.log(data.message)
+          console.log(response.message)
           location.reload()
           break
         case 'init':
-          if (data.message === 'complete') getGames()
+          if (response.message === 'complete') getGames()
+          break
+        case 'getGames':
+          if (Array.isArray(response.data)) {
+            for (const game of response.data) {
+              games.set(game.gameId, game)
+            }
+            response.data.forEach(game => addGame(game))
+            countUnfinished()
+          }
+          break
+        case 'newGame':
+          games.set(response.data.gameId, response.data)
+          addGame(response.data)
+          break
+        case 'updateGame':
+          toggleFinished(response.data.gameId)
+          break
+        case 'deleteGame':
+          removeGame(response.data.gameId)
           break
         case 'message':
-          addMessage(data.username, data.message)
+          addMessage(response.username, response.message)
           break
         case 'changeUsername':
-          chatUsernameChange(data.oldUsername, data.username)
+          chatUsernameChange(response.oldUsername, response.username)
           break
         default:
       }
@@ -90,12 +110,73 @@ function keepAlive () {
   } else console.log(ws.readyState)
 }
 
+function wsSend (data) {
+  ws.send(JSON.stringify(data))
+}
+
 function getGames () {
-  ws.send(JSON.stringify({ socketId: uuid, type: 'getGames', data: 'all' }))
+  wsSend({ socketId: uuid, type: 'getGames', data: 'all' })
+  removeGame()
+}
+
+function addGame (game) {
+  const contenair = document.createElement('div')
+  contenair.classList.add('game')
+  contenair.id = game.gameId
+
+  const finishedIco = document.createElement('img')
+  finishedIco.classList.add('small')
+  finishedIco.classList.add('left')
+  if (!game.finished) finishedIco.classList.add('running')
+  finishedIco.src = './img/check_circle-black-24dp.svg'
+
+  finishedIco.onclick = () => wsSend({ type: 'updateGame', data: { gameId: game.gameId } })
+
+  const deleteIco = document.createElement('img')
+  deleteIco.classList.add('small')
+  deleteIco.classList.add('right')
+  deleteIco.src = './img/disabled_by_default-black-24dp.svg'
+
+  deleteIco.onclick = () => {
+    if (confirm(`Voulez vous supprimer la partie ${game.gameName} ?`)) {
+      wsSend({ type: 'deleteGame', data: { gameId: game.gameId } })
+    }
+  }
+
+  const name = document.createTextNode(game.gameName)
+
+  contenair.appendChild(finishedIco)
+  contenair.appendChild(name)
+  contenair.appendChild(deleteIco)
+
+  gameHolder.appendChild(contenair)
+}
+
+function toggleFinished (id) {
+  document.getElementById(id).querySelector('img').classList.toggle('running')
+  games.get(id).finished = !games.get(id).finished
+  countUnfinished()
+}
+
+function removeGame (id = null) {
+  gameHolder.querySelectorAll('.game').forEach(element => {
+    if (id === null || element.id === id) element.remove()
+  })
+  if (id === null) games.clear()
+  else games.delete(id)
+  countUnfinished()
+}
+
+function countUnfinished () {
+  nbUnfinished = 0
+  for (const [, game] of games) {
+    nbUnfinished += Number(game.finished === false)
+  }
+  document.getElementById('nbGames').textContent = nbUnfinished
 }
 
 function sendGameToWebsocket (gameObject) {
-  ws.send(JSON.stringify({ socketId: uuid, type: 'newGame', data: gameObject }))
+  wsSend({ socketId: uuid, type: 'newGame', data: gameObject })
 }
 
 function changeUsername () {
@@ -104,7 +185,7 @@ function changeUsername () {
   } else {
     chatUsernameChange(username, document.querySelector('#username').value.trim())
     username = document.querySelector('#username').value.trim()
-    ws.send(JSON.stringify({ type: 'changeUsername', username: username }))
+    wsSend({ type: 'changeUsername', username: username })
   }
 }
 
@@ -117,7 +198,7 @@ function chatUsernameChange (oldUsername, newUsername) {
 }
 
 function sendMessageToWebsocket (message, to = 'all') {
-  ws.send(JSON.stringify({ socketId: uuid, type: 'message', to: to, message: message }))
+  wsSend({ socketId: uuid, type: 'message', to: to, message: message })
 }
 
 function addMessage (from, message) {
@@ -137,6 +218,7 @@ function addMessage (from, message) {
   newMessage.appendChild(content)
 
   chatHolder.appendChild(newMessage)
+  chatHolder.scrollTop = chatHolder.scrollHeight
 }
 
 function replace (what, type = 'input', callback = () => { }) {

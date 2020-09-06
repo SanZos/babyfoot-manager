@@ -13,28 +13,44 @@ class Database {
     this.initDatabase(reapply)
   }
 
-  testConnection () { }
+  testConnection () {
+    try {
+      this.executeQuery('SELECT version();')
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
 
   initDatabase (reapply) {
     const migrationBase = this.executeQuery('SELECT file FROM migration;')
+    const migration = []
     fs.readdirSync(`${__dirname}/../database`).forEach(file => {
       const ext = file.split('.')
       if (ext[ext.length - 1] === 'sql') {
-        const migrationFile = fs.readFileSync(`${__dirname}/../database/${file}`, { encoding: 'utf-8' }).split('-- DOWN')
-        const up = migrationFile[0].replace('-- UP', '').trim()
-        const down = migrationFile[1].trim()
-        /*
-        console.log(up)
-        this.executeQuery(down)
-        this.executeQuery(up)
-        this.executeMigration(file, up, down)
-        */
+        if (!JSON.stringify(migrationBase).includes(file) || reapply) {
+          const migrationFile = fs.readFileSync(`${__dirname}/../database/${file}`, { encoding: 'utf-8' }).split('-- DOWN')
+          const up = migrationFile[0].replace('-- UP', '').trim()
+          const down = migrationFile[1].trim()
+          migration.push({ file: file, up: up, down: down })
+        }
       }
     })
+    if (reapply) {
+      migration.reverse()
+      migration.forEach(sql => this.executeMigration(sql.file, sql.up, sql.down, true))
+      migration.reverse()
+    }
+    migration.forEach(sql => this.executeMigration(sql.file, sql.up, sql.down))
   }
 
-  executeMigration (file, up, down) {
-    this.executeQuery(`INSERT INTO migration VALUES ('${file}', '${up}', '${down}');`)
+  executeMigration (file, up, down, drop = false) {
+    if (!drop) {
+      this.executeQuery(up)
+      this.executeQuery(`INSERT INTO migration VALUES ('${file}', '${up}', '${down}');`)
+    } else {
+      this.executeQuery(down)
+      this.executeQuery(`DELETE FROM migration WHERE file = '${file}';`)
+    }
   }
 
   executeQuery (query) {
@@ -42,7 +58,7 @@ class Database {
       const retour = child_process.execSync(`psql -h ${this.hostname} -p ${this.port} ${this.base} ${this.username} -t -R $ -A -c "${query}"`)
       return retour.toString().trim().split('$').map(line => line.split('|'))
     } catch (error) {
-      console.log(error.stderr.toString())
+      throw error.stderr.toString()
     }
   }
 }
