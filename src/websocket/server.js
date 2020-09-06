@@ -82,7 +82,7 @@ class WebSocketServer {
 
   static route (socket, response) {
     if (typeof response === 'object' && response.type !== undefined && response.type !== null) {
-      console.log(response)
+      console.log(socket.socketId, response)
       switch (response.type) {
         case 'init':
           socket.socketId = response.socketId
@@ -91,20 +91,19 @@ class WebSocketServer {
           break
         case 'newGame':
           // database
-          WebSocketServer.sendData(socket.id, 'other', { type: response.type, data: { gameName: response.gameName, finished: false } })
+          WebSocketServer.sendData(socket.socketId, 'other', { type: response.type, data: { gameName: response.gameName, finished: false } })
           break
         case 'changeUsername':
-          WebSocketServer.sendData(socket.id, 'other', { type: response.type, username: response.username, oldUsername: socket.username, message: response.message })
+          WebSocketServer.sendData(socket.socketId, 'other', { type: response.type, username: response.username, oldUsername: socket.username, message: response.message })
           socket.username = response.username
           break
         case 'message':
-          WebSocketServer.sendData(socket.id, response.to, { type: 'message', username: socket.username, message: response.message })
+          WebSocketServer.sendData(socket.socketId, response.to, { type: 'message', username: socket.username, message: response.message })
           break
         default:
           break
       }
     }
-    // socket.id
   }
 
   /**
@@ -118,22 +117,22 @@ class WebSocketServer {
     if (to === 'all') {
       sockets = Object.keys(WebSocketServer.registeredWebsocket)
     } else if (to === 'other' || to !== null) {
-      sockets.push(
-        Object.keys(WebSocketServer.registeredWebsocket).find(acceptKey => {
-          if (to === 'other') return WebSocketServer.registeredWebsocket[acceptKey].socketId !== from
-          else return WebSocketServer.registeredWebsocket[acceptKey].socketId === to
-        })
-      )
+      sockets = Object.keys(WebSocketServer.registeredWebsocket).filter(acceptKey => {
+        if (to === 'other') return WebSocketServer.registeredWebsocket[acceptKey].socketId !== from
+        else return WebSocketServer.registeredWebsocket[acceptKey].socketId === to
+      })
     } else {
       return null
     }
     if (Array.isArray(sockets) && sockets.length > 0) {
       const sendMessage = Object.assign({ from: from }, message)
+      console.log(sockets, from, to, message)
       sockets.forEach(acceptKey => {
         try {
           WebSocketServer.registeredWebsocket[acceptKey].write(WebSocketServer.constructReply(sendMessage))
         } catch (error) {
-          console.error(error)
+          console.error(error.name, error)
+          if (error.code === 'ERR_STREAM_DESTROYED') delete WebSocketServer.registeredWebsocket[acceptKey]
         }
       })
     }

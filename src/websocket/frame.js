@@ -39,7 +39,7 @@ class WebSocketFrame {
     } else {
       this.buffer.copy(this.data, 0, this.currentOffset++)
     }
-    const dataString = this.data.toString('ascii')
+    const dataString = this.data.toString('utf-8')
     try {
       return JSON.parse(dataString)
     } catch {

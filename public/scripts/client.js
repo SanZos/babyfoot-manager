@@ -19,21 +19,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const messageInput = document.querySelector('#message')
   messageInput.addEventListener('keyup', (event) => {
     if (event.keyCode === 13 && messageInput.value.trim() !== '') {
+      console.log(messageInput.value.trim())
       sendMessageToWebsocket(messageInput.value.trim())
+      messageInput.value = ''
     }
   })
 
   const gameInput = document.querySelector('#game')
-  gameInput.addEventListener('keyup', (event) => { if (event.keyCode === 13) { } })
-  // document.querySelector('button.validate').addEventListener('click', event => {
-  //   event.preventDefault()
-  //   const gameName = document.querySelector('input#game').value
-  //   if (gameName !== '') {
-  //     const gameObject = { gameName: gameName, finished: false }
-  //     game.push(gameObject)
-  //     sendNewGameToWebsocket(gameObject)
-  //   }
-  // })
+  gameInput.addEventListener('keyup', (event) => {
+    if (event.keyCode === 13) {
+      const gameName = document.querySelector('input#game').value
+      if (gameName !== '') {
+        const gameObject = { gameName: gameName, finished: false }
+        game.push(gameObject)
+        sendGameToWebsocket(gameObject)
+      }
+    }
+  })
 })
 
 function CreateUUID () {
