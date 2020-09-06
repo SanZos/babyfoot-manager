@@ -21,7 +21,7 @@ header {
 }
 
 input {
-  width: 80%;
+  width: 100%;
   padding: 2px 10px;
   border: 1px solid #242933;
   box-sizing: border-box;  
@@ -43,14 +43,78 @@ main {
   margin-left: 5%;
   padding: 1em;
   background-color: #2E3440;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
   height: fit-content;
 }
 
 #chat {
   grid-area: chat;
+  margin-left: 5%;
+  padding: 1em;
+  background-color: #2E3440;
+  min-height: 20vh;
+  max-height: 80vh;
+}
+
+#username {
+  display: inline;
+}
+
+input#username {
+  width: auto;
+}
+
+#chatMessage {
+  height: 70%;
+  max-height: 80%;
+  overflow-x: auto;
+  border: 1px solid #242933;
+  background-color: #4C566A;
+}
+
+.message {
+  border: 1px solid #242933;
+  background-color: #434C5E;
+}
+
+.message > .username {
+  display: inline;
+  color: #BF616A
+}
+
+.message > .username.self {
+  display: inline;
+  color: #A3BE8C
+}
+
+.message > .content {
+  display: inline;
 }
 
 .round {
   border-radius: 5px;
+}
+
+.shadow {
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+@media only screen and (max-width: 1024px) {
+  body {
+    grid-template-columns: 1fr;
+    grid-template-rows: 80px 0fr 1fr;
+    grid-template-areas:
+        "header"
+        "main"
+        "chat";
+  }
+
+  main {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+  #chat {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+  
 }

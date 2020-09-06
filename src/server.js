@@ -50,11 +50,9 @@ configurationFile.dev.watch.forEach(w => {
   console.log(`Watching du fichier ${w}`)
   fs.watchFile(`${__root}/${configurationFile.server.clientPath}/${w}`, (curr, prev) => {
     console.log(`Mise à jour du fichier ${w}, demande de rafraichissement des clients`)
-    Object.keys(WebSocketServer.registeredWebsocket).forEach(webSocket => {
-      WebSocketServer.registeredWebsocket[webSocket].write(WebSocketServer.constructReply({ message: 'reload' }))
-    })
+    WebSocketServer.sendData('server', 'all', { type: 'reload', message: `Mise à jour du fichier ${w}, demande de rafraichissement des clients` })
   })
 })
 
 // now that server is running
-srv.listen(configurationFile.server.port, '127.0.0.1', () => { })
+srv.listen(configurationFile.server.port, '0.0.0.0', () => { })

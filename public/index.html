@@ -2,10 +2,10 @@
 <html lang="fr">
 
 <head>
-  <meta charset='UTF-8'>
-  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-  <meta http-equiv='X-UA-Compatible' content='ie=edge'>
-  <link rel='stylesheet' href='styles/main.css'>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="styles/main.css">
   <title>Babyfoot manager</title>
 </head>
 
@@ -14,15 +14,20 @@
   <header>
     <h1>Babyfoot manager</h1>
   </header>
-  <main id='app' class="round">
-    <form id='addGame' action='addGame' name='addGame'>
-      <input placeholder="Nouvelle partie" class="round" id='game' autocomplete='off' />
-      <button class="round validate">Ajouter</button>
+  <main id="app" class=" shadow">
+    <form id="addGame" action="addGame" name="addGame">
+      <input placeholder="Nouvelle partie" class="round" id="game" autocomplete="off" />
     </form>
-    <fieldset id='displayGames'>
+    <fieldset id="displayGames">
       <legend><span>Liste des parties</span><span id="nbGames"></span></legend>
     </fieldset>
   </main>
+  <div id="chat" class="round shadow">
+    <div class="title">Chat</div>
+    Utilisateur : <div id="username"></div>
+    <div id="chatMessage"></div>
+    <input type="text" placeholder="message" id="message"/>
+  </div>
 
   <script src="scripts/client.js"></script>
 </body>

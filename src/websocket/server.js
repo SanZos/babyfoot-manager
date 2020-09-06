@@ -58,7 +58,7 @@ class WebSocketServer {
   /**
    * On enregistre les websockets pour garder une trace
    * @param {Socket} socket websocket
-   * @param {String} acceptKey clé unique envoyer par le client
+   * @param {String} acceptKey clé d'acceptation envoyée par le client
    */
   static registerSocket (socket, acceptKey) {
     WebSocketServer.registeredWebsocket[acceptKey] = socket
@@ -70,7 +70,7 @@ class WebSocketServer {
     socket.on('data', data => {
       const response = new WebSocketFrame(data).parseFrame()
       if (response) {
-        socket.write(WebSocketServer.constructReply({ message: 'Réponse de ouf', detail: response }))
+        WebSocketServer.route(socket, response, acceptKey)
       } else if (response === null) {
         delete WebSocketServer.registeredWebsocket[acceptKey]
         socket.end()
@@ -78,6 +78,65 @@ class WebSocketServer {
         console.log(`WebSocket ${acceptKey} connection closed.`)
       }
     })
+  }
+
+  static route (socket, response) {
+    if (typeof response === 'object' && response.type !== undefined && response.type !== null) {
+      console.log(response)
+      switch (response.type) {
+        case 'init':
+          socket.socketId = response.socketId
+          socket.username = response.username
+          socket.write(WebSocketServer.constructReply({ type: response.type, message: 'init complete' }))
+          break
+        case 'newGame':
+          // database
+          WebSocketServer.sendData(socket.id, 'other', { type: response.type, data: { gameName: response.gameName, finished: false } })
+          break
+        case 'changeUsername':
+          WebSocketServer.sendData(socket.id, 'other', { type: response.type, username: response.username, oldUsername: socket.username, message: response.message })
+          socket.username = response.username
+          break
+        case 'message':
+          WebSocketServer.sendData(socket.id, response.to, { type: 'message', username: socket.username, message: response.message })
+          break
+        default:
+          break
+      }
+    }
+    // socket.id
+  }
+
+  /**
+   * Envoie de donnée aux client
+   * @param {UUID} from socketId du client qui envoie la demande
+   * @param {UUID|string} to socketId ou text de la destination
+   * @param {objet} message message a envoyer au(x) client(s)
+   */
+  static sendData (from, to, message) {
+    let sockets = []
+    if (to === 'all') {
+      sockets = Object.keys(WebSocketServer.registeredWebsocket)
+    } else if (to === 'other' || to !== null) {
+      sockets.push(
+        Object.keys(WebSocketServer.registeredWebsocket).find(acceptKey => {
+          if (to === 'other') return WebSocketServer.registeredWebsocket[acceptKey].socketId !== from
+          else return WebSocketServer.registeredWebsocket[acceptKey].socketId === to
+        })
+      )
+    } else {
+      return null
+    }
+    if (Array.isArray(sockets) && sockets.length > 0) {
+      const sendMessage = Object.assign({ from: from }, message)
+      sockets.forEach(acceptKey => {
+        try {
+          WebSocketServer.registeredWebsocket[acceptKey].write(WebSocketServer.constructReply(sendMessage))
+        } catch (error) {
+          console.error(error)
+        }
+      })
+    }
   }
 }
 
