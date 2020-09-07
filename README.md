@@ -9,8 +9,8 @@ Sa particularité sera de pouvoir créer des parties de manière collaborative.
 La norme utilisée pour le javascript est [standardjs](https://standardjs.com/)
 
 ### WebSocket
-Pour les WebSocket côté serveur j'ai décide de coder le minimum requis pour le fonctionnement de l'application.
-Dans l'implémentation ne sont gérée que :
+Pour les WebSockets côté serveur j'ai décidé de coder le minimum requis pour le fonctionnement de l'application.
+Dans l'implémentation ne sont gérées que :
 - les trames dont le payload est sur 7 bits
 - les trames de type texte
 - les trames non fragmentées

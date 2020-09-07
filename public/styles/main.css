@@ -2,14 +2,13 @@ body {
   background-color: #242933;
   color: #D8DEE9;
   height: 100vh;
-  font-family: 'Roboto';
-  margin: 0px 10px;
+  font-family: Calibri, 'Trebuchet MS', sans-serif;
+  margin: 0px;
   justify-content: center;
   display: grid;
-  /* grid-template-rows: 1fr 2fr; */
   grid-template-columns: 1.5fr 1fr;
   grid-template-rows: 80px 1fr;
-  gap: 1rem;
+  gap: 2vw;
   grid-template-areas:
       "header header"
       "main chat";
@@ -35,6 +34,7 @@ input {
 
 input::placeholder {
   color: #D8DEE9;
+  font-family: Calibri, 'Trebuchet MS', sans-serif;
 }
 
 img.small {
@@ -52,7 +52,7 @@ img.right {
 
 main {
   grid-area: main;
-  margin-left: 5%;
+  margin-left: 2vw;
   padding: 1em;
   background-color: #2E3440;
   height: fit-content;
@@ -60,7 +60,7 @@ main {
 
 #chat {
   grid-area: chat;
-  margin-left: 5%;
+  margin-right: 2vw;
   padding: 1em;
   background-color: #2E3440;
   height: 70vh;
@@ -91,9 +91,9 @@ input#username {
   color: #BF616A
 }
 
-.message > .username.self {
+.self {
   display: inline;
-  color: #A3BE8C
+  color: #A3BE8C !important;
 }
 
 .message > .content {
@@ -113,20 +113,44 @@ input#username {
   line-height: 24px;
 }
 
+.gameText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: calc(100% - 50px);
+  white-space: nowrap;
+  display: inline-block;
+}
+
 .running {
   filter: grayscale(1);
 }
 
+.title {
+  display: block;
+  font-size: 1.2em;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+#nbGames::before {
+  content: 'Partie en cours : ';
+}
+
 #nbGames {
   position: relative;
-  left: calc(50% - 110px);
+  left: calc(50% - 150px);
+  padding: 0px 5px;
   background-color: #242933;
   color: #8FBCBB;
   height: 24px;
   line-height: 24px;
-  width: 24px;
   text-align: center;
   display: inline-block;
+}
+
+#addGame {
+  margin-bottom: 10px;
 }
 
 @media only screen and (max-width: 1024px) {
@@ -149,5 +173,8 @@ input#username {
     margin-right: 5%;
     height: 50vh;
   }
-  
+
+  #nbGames {
+    left: 0%;
+  }
 }
