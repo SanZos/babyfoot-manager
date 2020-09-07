@@ -23,8 +23,8 @@ try {
     configurationFile.dev.watch.forEach(w => {
       console.log(`Watching du fichier ${w}`)
       fs.watchFile(`${__dirname}/${configurationFile.server.clientPath}/${w}`, (curr, prev) => {
-        console.log(`Mise à jour du fichier ${w}, demande de rafraichissement des clients`)
-        sendData('server', 'all', { type: 'reload', message: `Mise à jour du fichier ${w}, demande de rafraichissement des clients` })
+        console.log(`Mise à jour du fichier ${w}, demande de rafraîchissement des clients`)
+        sendData('server', 'all', { type: 'reload', message: `Mise à jour du fichier ${w}, demande de rafraîchissement des clients` })
       })
     })
   }

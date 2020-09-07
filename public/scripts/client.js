@@ -2,7 +2,7 @@
 
 // fd du WebSocket
 let ws
-// Nombre de partie en cours
+// Nombre de parties en cours
 let nbUnfinished = 0
 // Map des jeux
 const games = new Map()
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   usernameInput.addEventListener('touchend', (event) => replace(event.target, 'input', changeUsername))
 
   /**
-   * Ajout des événements pour l'envoie de message
+   * Ajout des événements pour l'envoi de messages
    */
   const messageInput = document.querySelector('#message')
   messageInput.addEventListener('keyup', (event) => {
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   /**
-   * Ajout des événements pour l'ajout de jeu
+   * Ajout des événements pour la création de jeux
    */
   const gameInput = document.querySelector('#game')
   gameInput.addEventListener('keyup', (event) => {
@@ -67,7 +67,7 @@ function CreateUUID () {
 }
 
 /**
- * Connection WebSocket et routage des événements
+ * Connexion WebSocket et routage des événements
  */
 function connect () {
   ws = new WebSocket(`ws://${document.location.host}`)
@@ -136,7 +136,7 @@ function keepAlive () {
 }
 
 /**
- * Envoie des données par WebSocket
+ * Envoi des données par WebSocket
  * @param {Object} data données a envoyer au serveur
  */
 function wsSend (data) {
@@ -144,7 +144,7 @@ function wsSend (data) {
 }
 
 /**
- * Récupération de tout les jeux par le WebSocket
+ * Récupération de tous les jeux par le WebSocket
  */
 function getGames () {
   wsSend({ socketId: uuid, type: 'getGames', data: 'all' })
@@ -153,7 +153,7 @@ function getGames () {
 
 /**
  * Ajout du jeu dans la liste des jeux
- * Création des boutons de fin de partie et de suppréssion
+ * Création des boutons de fin de partie et de suppression
  * @param {Objet} game objet représentant un jeu
  */
 function addGame (game) {
@@ -199,7 +199,7 @@ function addGame (game) {
 
 /**
  * Bascule entre les deux états 'en cours' et 'fini'
- * @param {Number} id du jeu a mettre à jour
+ * @param {Number} id du jeu à mettre à jour
  */
 function toggleFinished (id) {
   document.getElementById(id).querySelector('img').classList.toggle('running')
@@ -221,7 +221,7 @@ function removeGame (id = null) {
 }
 
 /**
- * Comptage du nombres de partie en cours
+ * Comptage du nombre de parties en cours
  */
 function countUnfinished () {
   nbUnfinished = 0
@@ -232,7 +232,7 @@ function countUnfinished () {
 }
 
 /**
- * Envoie d'un nouveau jeu par Websocket
+ * Envoi d'un nouveau jeu par Websocket
  * @param {Object} gameObject objet représentant un jeu
  */
 function sendNewGameToWebsocket (gameObject) {
@@ -240,7 +240,7 @@ function sendNewGameToWebsocket (gameObject) {
 }
 
 /**
- * Changement du nom d'utilisateur a la validation et envoie par WebSocket pour répliqué aux autres clients
+ * Changement du nom d'utilisateur à la validation et envoi par WebSocket pour réappliquer aux autres clients
  */
 function changeUsername () {
   if (document.querySelector('#username').value.trim() === '') {
@@ -300,10 +300,10 @@ function addMessage (from, message) {
 }
 
 /**
- * Modification du type d'un element HTML
- * @param {Node} what element a remplacer
- * @param {string} type destination de l'element HTML
- * @param {Function} callback a utiliser si on gère des events
+ * Modification du type d'un élément HTML
+ * @param {Node} what élément à remplacer
+ * @param {string} type destination de l'élément HTML
+ * @param {Function} callback à utiliser si on gère des events
  */
 function replace (what, type = 'input', callback = () => { }) {
   let i
