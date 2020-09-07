@@ -1,5 +1,4 @@
-const { constructReply } = require('./websocketutils')
-const { sendData } = require('./websocketserver')
+const { constructReply, sendData } = require('./websocketserver')
 
 class WebSocketRouter {
   constructor () {

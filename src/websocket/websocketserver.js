@@ -3,7 +3,6 @@
  */
 const crypto = require('crypto')
 const WebSocketFrame = require('./websocketframe')
-const { constructReply } = require('./websocketutils')
 
 class WebSocketServer {
   constructor () {
@@ -92,7 +91,7 @@ class WebSocketServer {
       console.log(sockets, from, to, message)
       sockets.forEach(acceptKey => {
         try {
-          WebSocketServer.registeredWebsocket[acceptKey].write(constructReply(sendMessage))
+          WebSocketServer.registeredWebsocket[acceptKey].write(WebSocketServer.constructReply(sendMessage))
         } catch (error) {
           console.error(error.name, error)
           if (error.code === 'ERR_STREAM_DESTROYED') delete WebSocketServer.registeredWebsocket[acceptKey]
@@ -100,9 +99,30 @@ class WebSocketServer {
       })
     }
   }
+
+  /**
+   * Création de la trame de réponse du websocket
+   * @param {any} data donnée a envoyer au client du websocket
+   */
+  static constructReply (data) {
+    const json = JSON.stringify(data)
+    const jsonByteLength = Buffer.byteLength(json)
+    const lengthByteCount = jsonByteLength < 126 ? 0 : 2
+    const payloadLength = lengthByteCount === 0 ? jsonByteLength : 126
+    const buffer = Buffer.alloc(2 + lengthByteCount + jsonByteLength)
+    buffer.writeUInt8(0b10000001, 0)
+    buffer.writeUInt8(payloadLength, 1)
+    let payloadOffset = 2
+    if (lengthByteCount > 0) {
+      buffer.writeUInt16BE(jsonByteLength, 2); payloadOffset += lengthByteCount
+    }
+    buffer.write(json, payloadOffset)
+    return buffer
+  }
 }
 
 WebSocketServer.registeredWebsocket = new Map()
 
 exports.WebSocketServer = WebSocketServer
 exports.sendData = WebSocketServer.sendData
+exports.constructReply = WebSocketServer.constructReply
