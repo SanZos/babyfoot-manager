@@ -13,7 +13,8 @@ exports.runner = (type, actual, except) => {
     process.stdout.write('.')
     exports.ok++
   } catch (error) {
-    process.stdout.write(error, 'F')
+    process.stdout.write('E')
+    console.error(error)
     exports.ko++
   }
 }

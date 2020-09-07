@@ -36,7 +36,7 @@ class WebServer {
   }
 
   /**
-   * Ajout de la liason avec le routeur pour les websockets
+   * Ajout de la liaison avec le routeur pour les websockets
    * @param {WebSocketRouter} WebSocketRouter instance du routeur de websocket
    */
   registerWebSocketRouter (WebSocketRouter) {
