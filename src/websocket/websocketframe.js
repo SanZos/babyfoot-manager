@@ -35,7 +35,7 @@ class WebSocketFrame {
     }
     this.data = Buffer.alloc(this.payloadLength)
     if (isMasked) {
-      this.unMaskFrame(this.buffer, this.data, this.currentOffset, this.payloadLength)
+      this.unMaskFrame()
     } else {
       this.buffer.copy(this.data, 0, this.currentOffset++)
     }

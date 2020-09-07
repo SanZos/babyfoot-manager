@@ -1,4 +1,6 @@
 const fs = require('fs').promises
+let verbose = true
+if (process.env.NO_LOG === 'true') verbose = false
 
 const testRoot = './tests/'
 const testFiles = []
@@ -22,23 +24,24 @@ async function runTests () {
   for (const testFile of testFiles) {
     try {
       const module = require(testFile)
-      console.log(`Running test file : ${testFile}`)
+      if (verbose) console.log(`Running test file : ${testFile}`)
       run(module)
+      if (verbose) console.log('')
     } catch (error) {
       console.error(error)
       process.exit('-1')
     }
   }
   const { ko, ok } = require('./tests/testUtils')
-  console.log(`Nb tests\tok\t\tko\t\ttotal\r\n        \t${ok}\t\t${ko}\t\t${ko + ok}`)
+  console.log(`${verbose ? '' : '\r\n'}Nb tests\tok\t\tko\t\ttotal\r\n        \t${ok}\t\t${ko}\t\t${ko + ok}`)
 }
 
 function run (module) {
   const methods = Object.getOwnPropertyNames(module).filter(name => name.match(/Test$/) !== null)
   for (const method of methods) {
-    console.log(`Running test : ${method}`)
+    if (verbose) console.log(`Running test : ${method}`)
     module[method]()
-    process.stdout.write('\r\n')
+    if (verbose) console.log('')
   }
 }
 
