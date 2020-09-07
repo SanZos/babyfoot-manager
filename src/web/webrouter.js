@@ -1,6 +1,9 @@
 const fs = require('fs')
 const path = require('path')
 
+/**
+ * Constante des type MIME
+ */
 const mime = {
   '.js': 'application/javascript',
   '.json': 'application/json',
@@ -10,11 +13,23 @@ const mime = {
   '.svg': 'image/svg+xml'
 }
 
+/**
+ * Routeur HTTP
+ */
 class WebRouter {
+  /**
+   * Création de l'instance du routeur
+   * @param {Object} configuration configuration du routeur
+   */
   constructor (configuration) {
     this.basePath = configuration.clientPath
   }
 
+  /**
+   * Gestion de la route et envoie de l'HTML
+   * @param {Request} req requête web à router
+   * @param {Response} res reponse socket de réponse
+   */
   handle (req, res) {
     const [type, file] = this.route(req.url)
     if (type === null || file === null) {
@@ -26,6 +41,10 @@ class WebRouter {
     }
   }
 
+  /**
+  //  * Verification de l'existence du fichier et extraction de l'extension
+   * @param {string} filePath le fichier à récupérer et à servir
+   */
   route (filePath) {
     if (filePath === '/') {
       filePath = '/index.html'
