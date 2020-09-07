@@ -49,18 +49,18 @@ class WebSocketServer {
    * @param {String} acceptKey clé d'acceptation envoyée par le client
    */
   registerSocket (socket, acceptKey) {
-    WebSocketServer.registeredWebsocket[acceptKey] = socket
+    WebSocketServer.registeredWebsocket.set(acceptKey, socket)
     socket.on('timeout', data => {
       console.log(`Timeout WebSocket ${acceptKey} connection closed.`)
       socket.destroy()
-      delete WebSocketServer.registeredWebsocket[acceptKey]
+      WebSocketServer.registeredWebsocket.delete(acceptKey)
     })
     socket.on('data', data => {
       const response = new WebSocketFrame(data).parseFrame()
       if (response) {
         this.router.route(socket, response, acceptKey)
       } else if (response === null) {
-        delete WebSocketServer.registeredWebsocket[acceptKey]
+        WebSocketServer.registeredWebsocket.delete(acceptKey)
         socket.end()
         socket.destroy()
         console.log(`WebSocket ${acceptKey} connection closed.`)
@@ -75,26 +75,28 @@ class WebSocketServer {
    * @param {objet} message message a envoyer au(x) client(s)
    */
   static sendData (from, to, message) {
-    let sockets = []
+    let sockets = new Map()
     if (to === 'all') {
-      sockets = Object.keys(WebSocketServer.registeredWebsocket)
+      sockets = WebSocketServer.registeredWebsocket
     } else if (to === 'other' || to !== null) {
-      sockets = Object.keys(WebSocketServer.registeredWebsocket).filter(acceptKey => {
-        if (to === 'other') return WebSocketServer.registeredWebsocket[acceptKey].socketId !== from
-        else return WebSocketServer.registeredWebsocket[acceptKey].socketId === to
-      })
+      for (const [index, socket] of WebSocketServer.registeredWebsocket) {
+        if (to === 'other' && socket.socketId !== from) sockets.set(index, socket)
+        else if (to === socket.socketId) sockets.set(index, socket)
+      }
     } else {
       return null
     }
-    if (Array.isArray(sockets) && sockets.length > 0) {
+    if (sockets instanceof Map && sockets.size > 0) {
       const sendMessage = Object.assign({ from: from }, message)
-      console.log(sockets, from, to, message)
-      sockets.forEach(acceptKey => {
+      if (process.env.NODE_ENV === 'dev') console.log(sockets, from, to, message)
+      sockets.forEach((socket, acceptKey) => {
         try {
-          WebSocketServer.registeredWebsocket[acceptKey].write(WebSocketServer.constructReply(sendMessage))
+          socket.write(WebSocketServer.constructReply(sendMessage))
         } catch (error) {
           console.error(error.name, error)
-          if (error.code === 'ERR_STREAM_DESTROYED') delete WebSocketServer.registeredWebsocket[acceptKey]
+          if (error.code === 'ERR_STREAM_DESTROYED') {
+            WebSocketServer.registeredWebsocket.delete(acceptKey)
+          }
         }
       })
     }
