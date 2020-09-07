@@ -11,7 +11,7 @@ class WebSocketRouter {
 
   route (socket, response) {
     if (typeof response === 'object' && response.type !== undefined && response.type !== null) {
-      console.log(socket.socketId, response)
+      if (process.env.NODE_ENV === 'dev') console.log(socket.socketId, response)
       switch (response.type) {
         case 'init':
           socket.socketId = response.socketId
@@ -45,7 +45,7 @@ class WebSocketRouter {
         case 'deleteGame':
           try {
             const retour = this.database.executeQuery(`DELETE FROM partie WHERE id = ${response.data.gameId};`)
-            console.log(retour)
+            if (process.env.NODE_ENV === 'dev') console.log(retour)
             sendData(socket.socketId, 'all', { type: response.type, data: { gameId: response.data.gameId } })
           } catch (error) {
             console.error('Erreur de suppression', error)
@@ -54,7 +54,7 @@ class WebSocketRouter {
         case 'updateGame':
           try {
             const retour = this.database.executeQuery(`UPDATE partie SET finished = NOT(finished) WHERE id = ${response.data.gameId} RETURNING finished;`)
-            console.log(retour)
+            if (process.env.NODE_ENV === 'dev') console.log(retour)
             sendData(socket.socketId, 'all', { type: response.type, data: { gameId: response.data.gameId } })
           } catch (error) {
             console.error('Erreur de mise à jour', error)
