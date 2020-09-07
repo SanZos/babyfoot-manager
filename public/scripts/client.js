@@ -37,7 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const messageInput = document.querySelector('#message')
   messageInput.addEventListener('keyup', (event) => {
     if (event.keyCode === 13 && messageInput.value.trim() !== '') {
-      console.log(messageInput.value.trim())
       sendMessageToWebsocket(messageInput.value.trim())
       messageInput.value = ''
     }
@@ -78,12 +77,10 @@ function connect () {
   })
 
   ws.addEventListener('message', event => {
-    console.log(event.data)
     try {
       const response = JSON.parse(event.data)
       switch (response.type) {
         case 'reload':
-          console.log(response.message)
           location.reload()
           break
         case 'init':
@@ -135,7 +132,7 @@ function keepAlive () {
   if (ws.readyState === ws.OPEN) {
     ws.send('')
     setTimeout(keepAlive, timeout)
-  } else console.log(ws.readyState)
+  }
 }
 
 /**
