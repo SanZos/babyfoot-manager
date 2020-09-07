@@ -7,11 +7,14 @@
     {
       "type": "node",
       "request": "launch",
+      "env": {
+        "NODE_ENV": "dev"
+      },
       "name": "Launch Program",
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "${workspaceFolder}/src/server.js"
+      "program": "${workspaceFolder}/index.js"
     }
   ]
 }
