@@ -121,6 +121,7 @@ class WebServerTest {
   }
 }
 
+/** @type WebServer */
 WebServerTest.object = {}
 
 module.exports = WebServerTest

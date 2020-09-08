@@ -33,7 +33,7 @@ class WebSocketRouterTest {
     runner('ok', WebSocketRouterTest.object instanceof WebSocketRouter)
 
     // Test des valeurs initial
-    runner('deepEqual', WebSocketRouterTest.object.database, null)
+    runner('equal', WebSocketRouterTest.object.database, null)
   }
 
   /**
@@ -140,6 +140,8 @@ class WebSocketRouterTest {
 }
 
 WebSocketRouterTest.data = {}
+
+/** @type WebSocketRouter */
 WebSocketRouterTest.object = {}
 
 module.exports = WebSocketRouterTest

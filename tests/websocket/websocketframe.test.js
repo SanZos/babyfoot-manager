@@ -71,6 +71,7 @@ class WebSocketFrameTest {
   }
 }
 
+/** @type WebSocketFrame */
 WebSocketFrameTest.object = {}
 
 module.exports = WebSocketFrameTest

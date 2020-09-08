@@ -69,6 +69,7 @@ class WebRouterTest {
   }
 }
 
+/** @type WebRouter */
 WebRouterTest.object = {}
 
 module.exports = WebRouterTest
