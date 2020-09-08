@@ -140,7 +140,7 @@ class DatabaseTest {
   }
 
   /**
-   * Test due la mise à jour
+   * Test de la mise à jour
    * @see Database.toggleFinished
    */
   static async toggleFinishedTest () {
