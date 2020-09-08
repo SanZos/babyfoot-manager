@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (gameName !== '') {
         const gameObject = { gameName: gameName, finished: false }
         sendNewGameToWebsocket(gameObject)
+        gameInput.value = ''
       }
     }
   })
@@ -100,7 +101,7 @@ function connect () {
           addGame(response.data)
           break
         case 'updateGame':
-          toggleFinished(response.data.gameId)
+          toggleFinished(response.data.gameId, response.data.finished)
           break
         case 'deleteGame':
           removeGame(response.data.gameId)
@@ -201,9 +202,9 @@ function addGame (game) {
  * Bascule entre les deux états 'en cours' et 'fini'
  * @param {Number} id du jeu à mettre à jour
  */
-function toggleFinished (id) {
+function toggleFinished (id, newVal = null) {
   document.getElementById(id).querySelector('img').classList.toggle('running')
-  games.get(id).finished = !games.get(id).finished
+  games.get(id).finished = newVal === null ? !games.get(id).finished : (newVal === 't')
   countUnfinished()
 }
 
