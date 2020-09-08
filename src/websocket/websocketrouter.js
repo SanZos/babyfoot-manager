@@ -1,14 +1,42 @@
 const { constructReply, sendData } = require('./websocketserver')
 
+/**
+ * Routeur de WebSocket
+ * @prop {(Database|null)} database gestionnaire de la base
+ */
 class WebSocketRouter {
+  /**
+   * Initialisation des attributs du routeur de WebSocket
+   */
   constructor () {
     this.database = null
   }
 
+  /**
+   * Ajout de la liaison avec la base de données
+   * @param {Database} database gestionnaire de la base de donées
+   */
   registerDatabase (database) {
     this.database = database
   }
 
+  /**
+   * Routage des messages en provenance du WebSocket
+   *
+   * Liste des type de repsonse :
+   *  'init' => Initialisation du client
+   *  'getGames' => Récupération de tout les jeux
+   *  'newGame' => Ajout d'un nouveau jeu
+   *  'deleteGame' => Suppression d'un jeu
+   *  'updateGame' => Mise à jour de l'état du jeu
+   *  'changeUsername' => Changement du nom d'utilisateur du client
+   *  'message' => Envoie de message aux autres clients
+   *
+   * @param {net.Socket} socket websocket a traiter
+   * @param {object} response donnée envoyer par le websocket
+   *
+   * @returns Promise
+   */
   route (socket, response) {
     if (typeof response === 'object' && response.type !== undefined && response.type !== null) {
       if (process.env.NODE_ENV === 'dev') console.log(socket.socketId, response)
@@ -17,58 +45,40 @@ class WebSocketRouter {
           socket.socketId = response.socketId
           socket.username = response.username
           socket.write(constructReply({ type: response.type, message: 'complete' }))
-          break
+          return Promise.resolve()
         case 'getGames':
-          try {
-            const games = this.database.executeQuery('SELECT * FROM partie ORDER BY id;')
-            const gamesObject = []
-            for (const game of games) {
-              gamesObject.push({
-                gameId: game[0],
-                gameName: game[1],
-                finished: game[2] === 't'
-              })
-            }
+          return this.database.getParties().then(gamesObject => {
             sendData('server', socket.socketId, { type: response.type, data: gamesObject })
-          } catch (error) {
+          }).catch(error => {
             console.error('Erreur de récupération', error)
-          }
-          break
+          })
         case 'newGame':
-          try {
-            const returnId = this.database.executeQuery(`INSERT INTO partie (name) VALUES ('${response.data.gameName}') RETURNING id;`)[0][0].split('\n')[0]
+          return this.database.addPartie(response.data.gameName).then(returnId => {
             sendData(socket.socketId, 'all', { type: response.type, data: { gameId: returnId, gameName: response.data.gameName, finished: response.data.finished } })
-          } catch (error) {
+          }).catch(error => {
             console.error('Erreur d\'insertion', error)
-          }
-          break
+          })
         case 'deleteGame':
-          try {
-            const retour = this.database.executeQuery(`DELETE FROM partie WHERE id = ${response.data.gameId};`)
-            if (process.env.NODE_ENV === 'dev') console.log(retour)
+          return this.database.deleteGame(response.data.gameId).then(() => {
             sendData(socket.socketId, 'all', { type: response.type, data: { gameId: response.data.gameId } })
-          } catch (error) {
+          }).catch(error => {
             console.error('Erreur de suppression', error)
-          }
-          break
+          })
         case 'updateGame':
-          try {
-            const retour = this.database.executeQuery(`UPDATE partie SET finished = NOT(finished) WHERE id = ${response.data.gameId} RETURNING finished;`)
-            if (process.env.NODE_ENV === 'dev') console.log(retour)
-            sendData(socket.socketId, 'all', { type: response.type, data: { gameId: response.data.gameId } })
-          } catch (error) {
+          return this.database.toggleFinished(response.data.gameId).then(newVal => {
+            sendData(socket.socketId, 'all', { type: response.type, data: { gameId: response.data.gameId, finished: newVal } })
+          }).catch(error => {
             console.error('Erreur de mise à jour', error)
-          }
-          break
+          })
         case 'changeUsername':
           sendData(socket.socketId, 'other', { type: response.type, username: response.username, oldUsername: socket.username, message: response.message })
           socket.username = response.username
-          break
+          return Promise.resolve()
         case 'message':
           sendData(socket.socketId, response.to, { type: 'message', username: socket.username, message: response.message })
-          break
+          return Promise.resolve()
         default:
-          break
+          return Promise.resolve()
       }
     }
   }

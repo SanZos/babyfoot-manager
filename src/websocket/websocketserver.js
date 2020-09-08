@@ -88,7 +88,7 @@ class WebSocketServer {
     }
     if (sockets instanceof Map && sockets.size > 0) {
       const sendMessage = Object.assign({ from: from }, message)
-      if (process.env.NODE_ENV === 'dev') console.log(sockets, from, to, message)
+      if (process.env.NODE_ENV === 'dev') console.log(from, to, message)
       sockets.forEach((socket, acceptKey) => {
         try {
           socket.write(WebSocketServer.constructReply(sendMessage))

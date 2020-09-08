@@ -1,5 +1,13 @@
+/**
+ * Classe de parsing des trames du websocket
+ * @prop {Buffer} buffer
+ * @prop {number} currentOffset
+ * @prop {number} payloadLength
+ * @prop {(Buffer|null)} data
+ */
 class WebSocketFrame {
   /**
+   * Initialisation du décodeur de trame
   * @param {Buffer} buffer donnée d'entré du websocket
   */
   constructor (buffer) {

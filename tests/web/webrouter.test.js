@@ -30,9 +30,7 @@ class WebRouterTest {
    * @see WebRouter.handle()
    */
   static handleTest () {
-    /**
-     * MockUp
-     */
+    // MockUp
     const res = {
       head: [],
       data: '',

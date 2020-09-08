@@ -27,7 +27,7 @@ class WebServerTest {
    * @see WebServer.registerRouter
    */
   static registerRouterTest () {
-    // mockUp
+    // MockUp
     const f = () => { }
 
     // Vérification de la modification de l'instance et du retour
@@ -45,7 +45,7 @@ class WebServerTest {
    * @see WebServer.registerDatabase
    */
   static registerDatabaseTest () {
-    // mockUp
+    // MockUp
     const f = () => { }
 
     // Vérification de la modification de l'instance et du retour
@@ -60,7 +60,7 @@ class WebServerTest {
    * @see WebServer.registerWebSocketRouter
    */
   static registerWebSocketRouterTest () {
-    // mockUp
+    // MockUp
     const f = {
       database: null,
       registerDatabase: (database) => { f.database = database }
@@ -81,7 +81,7 @@ class WebServerTest {
    * @see WebServer.registerWebSocket
    */
   static registerWebSocketTest () {
-    // mockUp
+    // MockUp
     const f = {
       router: null,
       registerRouter: (webSocketRouter) => { f.router = webSocketRouter }

@@ -15,6 +15,7 @@ const mime = {
 
 /**
  * Routeur HTTP
+ * @param {string} basePath
  */
 class WebRouter {
   /**

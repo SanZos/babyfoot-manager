@@ -31,15 +31,23 @@ const unparsableFrame = Buffer.from([
 
 class WebSocketFrameTest {
   /**
+   * Test du constructeur
    * @see WebSocketFrame.constructor
    */
   static constructorTest () {
+    // Test de la création de l'objet
     WebSocketFrameTest.object = new WebSocketFrame(frame)
     runner('ok', WebSocketFrameTest.object instanceof WebSocketFrame)
 
+    // Vérification des valeurs initiales
+    runner('equal', WebSocketFrameTest.object.buffer, frame)
+    runner('equal', WebSocketFrameTest.object.currentOffset, 2)
+    runner('equal', WebSocketFrameTest.object.payloadLength, 0)
+    runner('equal', WebSocketFrameTest.object.data, null)
   }
 
   /**
+   * Test du parsing de trame
    * @see WebSocketFrame.parseFrame
    */
   static parseFrameTest () {
@@ -51,6 +59,7 @@ class WebSocketFrameTest {
   }
 
   /**
+   * Test du démasquage de la trame
    * @see WebSocketFrame.unMaskFrame
    */
   static unMaskFrameTest () {

@@ -2,6 +2,11 @@ const http = require('http')
 
 /**
  * Serveur Web
+ * @prop {(Database|null)} database gestionnaire de la base
+ * @prop {(WebRouter|null)} webRouter routeur web
+ * @prop {(WebSocketServer|null)} webSocketServer serveur de WebSocket
+ * @prop {(WebSocketRouter|null)} webSocketRouter routeur de WebSocket
+ * @prop {http.Server} server serveur HTTP
  */
 class WebServer {
   /**
@@ -66,7 +71,7 @@ class WebServer {
    * Lancement du serveur
    */
   start (configuration) {
-    this.server.listen(configuration.port, configuration.hostname)
+    this.server.listen(configuration.port)
   }
 }
 
