@@ -4,11 +4,23 @@
 const crypto = require('crypto')
 const WebSocketFrame = require('./websocketframe')
 
+/**
+ * WebSocket server gère les connexions WebSocket
+ * @prop {(WebSocketRouter|null)} router routeur des WebSockets
+ * @prop {Map} registeredWebsocket table des WebSockets ouverts
+ */
 class WebSocketServer {
+  /**
+   * Initialisation des attributs du serveur de WebSocket
+   */
   constructor () {
     this.router = null
   }
 
+  /**
+   * Ajout de la liaison avec le routeur de WebSocket
+   * @param {WebSocketRouter} routeur routeur des messages du WebSocket
+   */
   registerRouter (router) {
     this.router = router
   }
@@ -44,7 +56,7 @@ class WebSocketServer {
   }
 
   /**
-   * On enregistre les websockets pour garder une trace
+   * On enregistre les WebSockets pour garder une trace
    * @param {Socket} socket websocket
    * @param {String} acceptKey clé d'acceptation envoyée par le client
    */
