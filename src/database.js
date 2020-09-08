@@ -56,7 +56,7 @@ class Database {
         }
       }
     })
-    migration.forEach(sql => this.executeMigration(sql.file, sql.up, sql.down))
+    migration.forEach(sql => this.executeMigration(sql.file, sql.up.replace(/[\r\n]/g, ''), sql.down.replace(/[\r\n]/g, '')))
   }
 
   /**
@@ -80,7 +80,7 @@ class Database {
    */
   executeQuery (query) {
     try {
-      const retour = child_process.execSync(`psql -h ${this.hostname} -p ${this.port} ${this.base} ${this.username} -t -R \u0001 -A -c "${query}"`)
+      const retour = child_process.execSync(`psql -h ${this.hostname} -p ${this.port} -d ${this.base} -U ${this.username} -t -R \u0001 -A -c "${query}"`)
       return retour.toString().trim().split('\u0001').map(line => line.split('|'))
     } catch (error) {
       throw error.stderr.toString()
@@ -120,9 +120,9 @@ class Database {
   addGame (gameName) {
     return new Promise((resolve, reject) => {
       try {
-        const retour = this.executeQuery(`INSERT INTO partie (name) VALUES ('${gameName.replace('"', '\\"').replace('\'', '\'\'')}') RETURNING id;`)[0][0].split('\n')
+        const retour = this.executeQuery(`INSERT INTO partie (name) VALUES ('${gameName.replace(/"/g, '\\"').replace(/'/g, '\'\'')}') RETURNING id;`)[0][0].split('\n')
         if (retour[1] !== 'INSERT 0 1') reject(retour)
-        resolve(retour[0])
+        resolve(retour[0].trim())
       } catch (error) {
         reject(error)
       }
@@ -139,7 +139,7 @@ class Database {
         if (isNaN(gameId)) throw new Error('NaN')
         const retour = this.executeQuery(`UPDATE partie SET finished = NOT(finished) WHERE id = ${gameId} RETURNING finished;`)[0][0].split('\n')
         if (retour[1] !== 'UPDATE 1') throw new Error(retour)
-        resolve(retour[0])
+        resolve(retour[0].trim())
       } catch (error) {
         reject(error)
       }
