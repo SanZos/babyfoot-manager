@@ -8,7 +8,8 @@
         "port": 5432,
         "username": "babyfoot",
         "password": "babyfoot",
-        "base": "BabyfootManager"
+        "base": "babyfootmanager",
+        "scripts": "sql"
     },
     "dev": {
         "watch": [
