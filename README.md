@@ -77,3 +77,10 @@ $ npm run start
 ```
 
 ## Utilisation de l'application
+
+![Page de garde](/docs/accueil.png)
+
+La gestion des parties se retrouve sur la partie gauche de l'écran
+
+![Partie](/docs/parties.png)
+
