@@ -120,8 +120,8 @@ class DatabaseTest {
     dbKO = false
     // Vérification de la récupération des partie
     runner('deepEqual', await DatabaseTest.object.getGames(), [
-      { gameId: 1, gameName: 'Marine vs Thibault', finished: false },
-      { gameId: 2, gameName: 'Bernadette vs Fargolin', finished: true }])
+      { gameId: '1', gameName: 'Marine vs Thibault', finished: false },
+      { gameId: '2', gameName: 'Bernadette vs Fargolin', finished: true }])
   }
 
   /**

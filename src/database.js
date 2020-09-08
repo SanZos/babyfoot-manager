@@ -99,7 +99,7 @@ class Database {
         for (const game of games) {
           if (game[0] !== '') {
             gamesObject.push({
-              gameId: Number(game[0]),
+              gameId: game[0],
               gameName: game[1],
               finished: game[2] === 't'
             })
