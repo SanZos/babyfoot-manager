@@ -20,20 +20,35 @@ Dans l'implémentation ne sont gérées que :
 ### Pré-requis
 * Node v10 (Testé sur la 10.22.0)
 * PostgreSQL 11.9
-* Disposer du client psql sur la machine hébergeant le serveur
+* Disposer du client psql sur la machine hébergeant le serveur (l'avoir dans le PATH pour windows)
 * L'utilisateur lançant le serveur doit disposer des droits pour utiliser psql
 
 ### Base de données
 
 Création d'un utilisateur en base
+
+*Pour Linux*
 ```shell
-$ sudo -u postgres -i
-$ createuser --pwprompt babyfoot
+sudo -u postgres -i
+createuser --pwprompt babyfoot
 Enter password for new role: 
 Enter it again: 
-$ psql
-# CREATE DATABASE babyfootmanager;
-# GRANT ALL ON DATABASE babyfootmanager TO babyfoot;
+psql
+```
+
+*Pour Windows*
+```shell
+createuser -U postgres --pwprompt babyfoot
+Enter password for new role: 
+Enter it again: 
+psql -U postgres
+```
+
+Dans le prompt psql
+
+```shell
+CREATE DATABASE babyfootmanager;
+GRANT ALL ON DATABASE babyfootmanager TO babyfoot;
 ```
 
 ### Lancement des tests 
@@ -41,10 +56,21 @@ $ psql
 Se positionner dans le répertoire d'installation puis lancer
 
 ```shell
-$ # Pour les tests en verbose
-$ npm test
-$ # Pour les tests avec un retour bref
-$ SMALL_LOG=true npm test
+# Pour les tests en verbose
+npm test
+```
+
+*Pour Linux*
+```shell
+# Pour les tests avec un retour bref
+SMALL_LOG=true npm test
+```
+
+*Pour Windows PowerShell*
+```shell
+# Pour les tests avec un retour bref
+$env:SMALL_LOG=true 
+npm test
 ```
 
 ### Configuration de l'application
@@ -73,7 +99,7 @@ Modifier le fichier ./static/configuration.json avec les valeurs correspondant �
 Se positionner dans le répertoire d'installation puis lancer
 
 ```shell
-$ npm run start
+npm run start
 ```
 
 ## Utilisation de l'application
