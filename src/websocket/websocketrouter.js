@@ -14,7 +14,7 @@ class WebSocketRouter {
 
   /**
    * Ajout de la liaison avec la base de données
-   * @param {Database} database gestionnaire de la base de donées
+   * @param {Database} database gestionnaire de la base de données
    */
   registerDatabase (database) {
     this.database = database
@@ -23,17 +23,17 @@ class WebSocketRouter {
   /**
    * Routage des messages en provenance du WebSocket
    *
-   * Liste des type de repsonse :
+   * Liste des types de réponse :
    *  'init' => Initialisation du client
-   *  'getGames' => Récupération de tout les jeux
+   *  'getGames' => Récupération de tous les jeux
    *  'newGame' => Ajout d'un nouveau jeu
    *  'deleteGame' => Suppression d'un jeu
    *  'updateGame' => Mise à jour de l'état du jeu
    *  'changeUsername' => Changement du nom d'utilisateur du client
    *  'message' => Envoie de message aux autres clients
    *
-   * @param {net.Socket} socket websocket a traiter
-   * @param {object} response donnée envoyer par le websocket
+   * @param {net.Socket} socket websocket à traiter
+   * @param {object} response données envoyé par le websocket
    *
    * @returns Promise
    */
@@ -47,13 +47,13 @@ class WebSocketRouter {
           socket.write(constructReply({ type: response.type, message: 'complete' }))
           return Promise.resolve()
         case 'getGames':
-          return this.database.getParties().then(gamesObject => {
+          return this.database.getGames().then(gamesObject => {
             sendData('server', socket.socketId, { type: response.type, data: gamesObject })
           }).catch(error => {
             console.error('Erreur de récupération', error)
           })
         case 'newGame':
-          return this.database.addPartie(response.data.gameName).then(returnId => {
+          return this.database.addGame(response.data.gameName).then(returnId => {
             sendData(socket.socketId, 'all', { type: response.type, data: { gameId: returnId, gameName: response.data.gameName, finished: response.data.finished } })
           }).catch(error => {
             console.error('Erreur d\'insertion', error)

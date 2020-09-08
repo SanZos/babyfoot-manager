@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 
 /**
- * Constante des type MIME
+ * Constantes des types MIME
  */
 const mime = {
   '.js': 'application/javascript',
@@ -27,9 +27,9 @@ class WebRouter {
   }
 
   /**
-   * Gestion de la route et envoie de l'HTML
+   * Gestion de la route et envoi de l'HTML
    * @param {Request} req requête web à router
-   * @param {Response} res reponse socket de réponse
+   * @param {Response} res socket de réponse
    */
   handle (req, res) {
     const [type, file] = this.route(req.url)
@@ -43,7 +43,7 @@ class WebRouter {
   }
 
   /**
-  //  * Verification de l'existence du fichier et extraction de l'extension
+   * Vérification de l'existence du fichier et extraction de l'extension
    * @param {string} filePath le fichier à récupérer et à servir
    */
   route (filePath) {

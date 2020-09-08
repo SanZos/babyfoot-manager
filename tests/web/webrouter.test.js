@@ -15,13 +15,13 @@ class WebRouterTest {
     // Test de la création de l'objet
     runner('ok', (WebRouterTest.object instanceof WebRouter))
 
-    // Test de l'accès et de la valeur de l'option passé
+    // Test de l'accès et de la valeur de l'option passée
     runner('equal', WebRouterTest.object.basePath, '')
 
     // Test de l'attribution de la valeur
     runner('equal', new WebRouter({ clientPath: './static/' }).basePath, './static/')
 
-    // Test de la non collision de donnée
+    // Test de la non collision de données
     runner('notEqual', WebRouterTest.object.basePath, './static/')
   }
 

@@ -138,7 +138,7 @@ function keepAlive () {
 
 /**
  * Envoi des données par WebSocket
- * @param {Object} data données a envoyer au serveur
+ * @param {Object} data données à envoyer au serveur
  */
 function wsSend (data) {
   ws.send(JSON.stringify(data))
@@ -196,6 +196,7 @@ function addGame (game) {
   conteneur.appendChild(deleteIco)
 
   gameHolder.appendChild(conteneur)
+  countUnfinished()
 }
 
 /**
@@ -210,7 +211,7 @@ function toggleFinished (id, newVal = null) {
 
 /**
  * Supprime le, ou les, jeux de la liste
- * @param {Number|null} id du jeu a supprimer de la liste
+ * @param {Number|null} id du jeu à supprimer de la liste
  */
 function removeGame (id = null) {
   gameHolder.querySelectorAll('.game').forEach(element => {
@@ -267,8 +268,8 @@ function chatUsernameChange (oldUsername, newUsername) {
 }
 
 /**
- * Envoie d'un message au serveur en choisissant les destinataires
- * @param {string} message message a envoyer par le WebSocket
+ * Envoi d'un message au serveur en choisissant les destinataires
+ * @param {string} message message à envoyer par le WebSocket
  * @param {string} to destinataire du message
  */
 function sendMessageToWebsocket (message, to = 'all') {

@@ -8,7 +8,7 @@
 class WebSocketFrame {
   /**
    * Initialisation du décodeur de trame
-  * @param {Buffer} buffer donnée d'entré du websocket
+  * @param {Buffer} buffer données d'entrée du websocket
   */
   constructor (buffer) {
     this.buffer = buffer

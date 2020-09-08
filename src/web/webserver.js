@@ -4,8 +4,8 @@ const http = require('http')
  * Serveur Web
  * @prop {(Database|null)} database gestionnaire de la base
  * @prop {(WebRouter|null)} webRouter routeur web
- * @prop {(WebSocketServer|null)} webSocketServer serveur de WebSocket
- * @prop {(WebSocketRouter|null)} webSocketRouter routeur de WebSocket
+ * @prop {(WebSocketServer|null)} webSocketServer serveur de WebSockets
+ * @prop {(WebSocketRouter|null)} webSocketRouter routeur de WebSockets
  * @prop {http.Server} server serveur HTTP
  */
 class WebServer {
@@ -32,8 +32,8 @@ class WebServer {
   }
 
   /**
-   * Ajout de la liaison avec le module d'accès a la base
-   * @param {Database} Database instance du module d'accès a la base
+   * Ajout de la liaison avec le module d'accès à la base
+   * @param {Database} Database instance du module d'accès à la base
    */
   registerDatabase (Database) {
     this.database = Database
@@ -42,7 +42,7 @@ class WebServer {
 
   /**
    * Ajout de la liaison avec le routeur pour les websockets
-   * @param {WebSocketRouter} WebSocketRouter instance du routeur de websocket
+   * @param {WebSocketRouter} WebSocketRouter instance du routeur de websockets
    */
   registerWebSocketRouter (WebSocketRouter) {
     this.webSocketRouter = WebSocketRouter
@@ -51,8 +51,8 @@ class WebServer {
   }
 
   /**
-   * Ajout de la liaison avec le serveur de websocket
-   * @param {WebSocketServer} WebSocketServer instance serveur de websocket
+   * Ajout de la liaison avec le serveur de websockets
+   * @param {WebSocketServer} WebSocketServer instance serveur de websockets
    */
   registerWebSocket (WebSocketServer) {
     this.webSocketServer = WebSocketServer

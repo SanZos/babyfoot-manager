@@ -1,6 +1,6 @@
 const fs = require('fs').promises
 let verbose = true
-if (process.env.NO_LOG === 'true') verbose = false
+if (process.env.SMALL_LOG === 'true') verbose = false
 delete process.env.NODE_ENV
 
 const testRoot = './tests/'

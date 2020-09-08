@@ -5,7 +5,7 @@ const WebServer = require('../../src/web/webserver')
 
 class WebServerTest {
   /**
-   * Test du contructeur
+   * Test du constructeur
    * @see WebServer()
    */
   static constructorTest () {
@@ -56,7 +56,7 @@ class WebServerTest {
   }
 
   /**
-   * Test de la liaison avec le routeur de websocket
+   * Test de la liaison avec le routeur de websockets
    * @see WebServer.registerWebSocketRouter
    */
   static registerWebSocketRouterTest () {
@@ -72,12 +72,12 @@ class WebServerTest {
     // Vérification de la liaison
     runner('deepEqual', WebServerTest.object.webSocketRouter, f)
 
-    // Vérification du fait que la base de donnée est la même
+    // Vérification de l'intégrité de la base de données
     runner('deepEqual', WebServerTest.object.webSocketRouter.database, WebServerTest.object.database)
   }
 
   /**
-   * Test de la liaison avec le serveur de websocket
+   * Test de la liaison avec le serveur de websockets
    * @see WebServer.registerWebSocket
    */
   static registerWebSocketTest () {
@@ -102,7 +102,7 @@ class WebServerTest {
       this.webSocketServer.handshake(req, socket)
     }).toString())
 
-    // Vérification du fait que le router de webservice est le même
+    // Vérification de l'intégrité du router de webServices
     runner('deepEqual', WebServerTest.object.webSocketServer.router, WebServerTest.object.webSocketRouter)
   }
 
@@ -113,7 +113,7 @@ class WebServerTest {
   static startTest () {
     WebServerTest.object.start({ port: 8080 })
 
-    // Verification du démarrage du version
+    // Vérification du démarrage de version
     runner('ok', WebServerTest.object.server.listening)
 
     // Fermeture de la connexion

@@ -11,14 +11,14 @@ const WebSocketFrame = require('./websocketframe')
  */
 class WebSocketServer {
   /**
-   * Initialisation des attributs du serveur de WebSocket
+   * Initialisation des attributs du serveur de WebSockets
    */
   constructor () {
     this.router = null
   }
 
   /**
-   * Ajout de la liaison avec le routeur de WebSocket
+   * Ajout de la liaison avec le routeur de WebSockets
    * @param {WebSocketRouter} routeur routeur des messages du WebSocket
    */
   registerRouter (router) {
@@ -81,10 +81,10 @@ class WebSocketServer {
   }
 
   /**
-   * Envoie de donnée aux client
+   * Envoi de données au client
    * @param {UUID} from socketId du client qui envoie la demande
-   * @param {UUID|string} to socketId ou text de la destination
-   * @param {objet} message message a envoyer au(x) client(s)
+   * @param {UUID|string} to socketId ou texte de la destination
+   * @param {objet} message message à envoyer au(x) client(s)
    */
   static sendData (from, to, message) {
     let sockets = new Map()
@@ -116,7 +116,7 @@ class WebSocketServer {
 
   /**
    * Création de la trame de réponse du websocket
-   * @param {any} data donnée a envoyer au client du websocket
+   * @param {any} data données à envoyer au client du websocket
    */
   static constructReply (data) {
     const json = JSON.stringify(data)

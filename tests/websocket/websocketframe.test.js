@@ -51,7 +51,7 @@ class WebSocketFrameTest {
    * @see WebSocketFrame.parseFrame
    */
   static parseFrameTest () {
-    // Test du traitement d'une trame correct
+    // Test du traitement d'une trame correcte
     runner('deepEqual', WebSocketFrameTest.object.parseFrame(), unMasked)
 
     // Test du traitement d'un trame qui dépasse la limite

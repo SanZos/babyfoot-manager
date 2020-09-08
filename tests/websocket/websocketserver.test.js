@@ -40,7 +40,7 @@ class WebSocketServerTest {
     WebSocketServerTest.object = new WebSocketServer()
     runner('ok', WebSocketServerTest.object instanceof WebSocketServer)
 
-    // Test des valeurs initial
+    // Test des valeurs initiales
     runner('equal', WebSocketServerTest.object.router, null)
   }
 
@@ -70,7 +70,7 @@ class WebSocketServerTest {
     // Test du retour du socket mis à jour
     runner('deepEqual', WebSocketServerTest.object.handshake(req, socket), socket)
 
-    // Test de l'entête envoyer par le serveur
+    // Test de l'entête envoyée par le serveur
     runner('equal', socket.data, 'HTTP/1.1 101 Web Socket Protocol Handshake\r\nUpgrade: WebSocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: PCTVnEp5Fgk+FSRxTmDP8XrJlSk= \r\n\r\n')
 
     // Suppression du socket enregistrer
@@ -93,7 +93,7 @@ class WebSocketServerTest {
    * @see WebSocketServer.registerSocket
    */
   static registerSocketTest () {
-    // Test de la non présence de socket
+    // Test de l'absence de socket
     runner('deepEqual', WebSocketServer.registeredWebsocket, new Map())
 
     // Test de l'enregistrement d'un socket
@@ -107,28 +107,28 @@ class WebSocketServerTest {
   }
 
   /**
-   * Test de l'envoie de donnée
+   * Test de l'envoi de données
    * @see WebSocketServer.sendData
    */
   static sendDataTest () {
     // Test du retour si pas de destinataire
     runner('equal', WebSocketServer.sendData('', null, null), null)
 
-    // Test de l'envoie d'un message a un socket
+    // Test de l'envoi d'un message à un socket
     WebSocketServer.sendData('server', 'PCTVnEp5Fgk+FSRxTmDP8XrJlSk=', 'Message transmit')
     runner('deepEqual', socket.data, WebSocketServer.constructReply(Object.assign({ from: 'server' }, 'Message transmit')))
 
-    // Test de l'envoie d'un message aux autres sockets
+    // Test de l'envoi d'un message aux autres sockets
     WebSocketServer.sendData('PCTVnEp5FgkFSRxTmDP8XrJlSk=', 'other', 'Ah')
     runner('deepEqual', socket.data, WebSocketServer.constructReply(Object.assign({ from: 'PCTVnEp5FgkFSRxTmDP8XrJlSk=' }, 'Ah')))
 
-    // Test de l'envoie d'un message a tout le monde les sockets
+    // Test de l'envoi d'un message à tous les sockets
     WebSocketServer.sendData('PCTVnEp5FgkFSRxTmDP8XrJlSk=', 'all', 'Nouveau message')
     runner('deepEqual', socket.data, WebSocketServer.constructReply(Object.assign({ from: 'PCTVnEp5FgkFSRxTmDP8XrJlSk=' }, 'Nouveau message')))
   }
 
   /**
-   * Test de la création de packet de WebSocket
+   * Test de la création de packets de WebSocket
    * @see WebSocketServer.constructReply
    */
   static constructReplyTest () {

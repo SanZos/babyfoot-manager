@@ -10,7 +10,7 @@ const save = {
 save.constructReply = constructReply.bind({})
 save.sendData = sendData.bind({})
 
-// Ré-écriture des exports du serveur pour évité les collisions de test
+// Ré-écriture des exports du serveur pour éviter les collisions de tests
 module.children[1].exports.sendData = (...data) => { WebSocketRouterTest.data = data }
 module.children[1].exports.constructReply = (data) => { return data }
 
@@ -18,7 +18,7 @@ const WebSocketRouter = require('../../src/websocket/websocketrouter')
 
 class WebSocketRouterTest {
   static tearsDown () {
-    // Ré-écriture des exports du serveur pour évité les collisions de test
+    // Ré-écriture des exports du serveur pour éviter les collisions de tests
     module.children[1].exports.sendData = save.sendData.bind({})
     module.children[1].exports.constructReply = save.constructReply.bind({})
   }
@@ -32,7 +32,7 @@ class WebSocketRouterTest {
     WebSocketRouterTest.object = new WebSocketRouter()
     runner('ok', WebSocketRouterTest.object instanceof WebSocketRouter)
 
-    // Test des valeurs initial
+    // Test des valeurs initiales
     runner('equal', WebSocketRouterTest.object.database, null)
   }
 
@@ -44,11 +44,11 @@ class WebSocketRouterTest {
     // Mockup
     const f = {
       data: null,
-      getParties: (data) => {
+      getGames: (data) => {
         f.data = data
         return Promise.resolve({})
       },
-      addPartie: (data) => {
+      addGame: (data) => {
         f.data = data
         return Promise.resolve(12)
       },
@@ -92,7 +92,7 @@ class WebSocketRouterTest {
     runner('equal', socket.socketId, response.socketId)
     runner('equal', socket.username, response.username)
 
-    //  Test du routage de récupération de donnée de la base et d'envoie au client
+    //  Test du routage de récupération de données de la base et d'envoi au client
     response.type = 'getGames'
     await WebSocketRouterTest.object.route(socket, response)
     runner('deepEqual', WebSocketRouterTest.data, ['server', socket.socketId, { type: response.type, data: {} }])
