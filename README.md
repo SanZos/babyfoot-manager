@@ -5,7 +5,7 @@ BabyFoot Manager est une application web de type RIA permettant de créer des pa
 Sa particularité sera de pouvoir créer des parties de manière collaborative.
 
 ## Choix et implémentation
-## Norme de codage
+### Norme de codage
 La norme utilisée pour le javascript est [standardjs](https://standardjs.com/)
 
 ### WebSocket
@@ -15,6 +15,13 @@ Dans l'implémentation ne sont gérées que :
 - les trames de type texte
 - les trames non fragmentées
 
+### Base de données
+Pour ne pas utiliser de dépendances, j'ai choisi d'utiliser le shell et ainsi, envoyer les requêtes en mode texte.
+Il est donc indispensable de disposer du client psql de disponible sur la machine serveur.
+
+### Tests Unitaires
+Les tests unitaires ont été réalisés avec le module d'assertion intégré a Node.js.
+Les méthodes et les modules externes au test sont mockés dans les fichiers de tests.
 
 ## Installation 
 ### Pré-requis
@@ -101,6 +108,10 @@ Se positionner dans le répertoire d'installation puis lancer
 ```shell
 npm run start
 ```
+
+### Accèder à l'application
+
+Ouvrir un navigateur internet et accèder a l'url http://<ip du serveur>:<port de la configuration>/
 
 ## Utilisation de l'application
 
