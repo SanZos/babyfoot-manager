@@ -1,5 +1,20 @@
 /* global WebSocket, location, crypto, confirm */
 
+/**
+ * Si pas de sessionStorage
+ */
+if (typeof window.sessionStorage === 'undefined') {
+  window.sessionStorage = {
+    setItem: () => null,
+    getItem: () => null,
+    removeItem: () => null,
+    key: () => null,
+    clear: () => null
+  }
+}
+
+let [uuid, username] = getSession()
+
 // fd du WebSocket
 let ws
 // Nombre de parties en cours
@@ -7,7 +22,7 @@ let nbUnfinished = 0
 // Map des jeux
 const games = new Map()
 // UUID unique de la session
-const uuid = CreateUUID()
+if (uuid === null) uuid = setSession('uuid', CreateUUID())
 // Timeout de renouvellement de la connexion du WebSocket
 const timeout = 2000
 // Liste des jeux
@@ -15,7 +30,7 @@ const gameHolder = document.querySelector('#displayGames')
 // Fenêtre de chat
 const chatHolder = document.querySelector('#chatMessage')
 // Nom de l'utilisateur
-let username = `Utilisateur-${uuid}`
+if (username === null) username = setSession('username', `Utilisateur-${uuid}`)
 
 /**
  * Initialisation de la page et binding des événements du DOM
@@ -251,6 +266,7 @@ function changeUsername () {
     chatUsernameChange(username, document.querySelector('#username').value.trim())
     username = document.querySelector('#username').value.trim()
     wsSend({ type: 'changeUsername', username: username })
+    setSession('username', username)
   }
 }
 
@@ -331,4 +347,13 @@ function replace (what, type = 'input', callback = () => { }) {
   }
   what.replaceWith(i)
   i.focus()
+}
+
+function getSession () {
+  return [window.sessionStorage.getItem('uuid'), window.sessionStorage.getItem('username')]
+}
+
+function setSession (type, value) {
+  window.sessionStorage.setItem('username', username)
+  return value
 }

@@ -23,6 +23,9 @@ Il est donc indispensable de disposer du client psql de disponible sur la machin
 Les tests unitaires ont été réalisés avec le module d'assertion intégré a Node.js.
 Les méthodes et les modules externes au test sont mockés dans les fichiers de tests.
 
+### SessionStorage
+Si l'API sessionStorage est disponible, l'uuid et le nom de l'utilisateur sont sauvegardés et chargés à partir de ce Storage.
+
 ## Installation 
 ### Pré-requis
 * Node v10 (Testé sur la 10.22.0)
