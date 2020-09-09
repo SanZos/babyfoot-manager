@@ -150,3 +150,10 @@ Le nouveau nom est envoyé aux autres utilisateurs et vos précédents messages 
 Au centre se trouvent les messages envoyés par vous et les autres personnes connectées.
 
 En bas se trouve la boîte de texte qui permet de saisir les messages, ils sont envoyés à l'appui sur la touche entrée.
+
+## Changelog
+v1.1 :
+- Ajout de sessionStorage pour stocker le nom d'utilisateur et l'uuid
+
+v1.0 :
+- Version initial de l'application

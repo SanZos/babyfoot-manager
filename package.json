@@ -1,7 +1,7 @@
 {
   "name": "babyfoot",
-  "version": "1.0.0",
-  "description": "BabyFoot Manager est une application web de type RIA permettant de créer des parties de babyfoot. Sa particularité sera de pouvoir créer des parties de manière collaborative.  ",
+  "version": "1.1.0",
+  "description": "BabyFoot Manager est une application web de type RIA permettant de créer des parties de babyfoot. Sa particularité sera de pouvoir créer des parties de manière collaborative.",
   "main": "index.js",
   "scripts": {
     "start": "node ./index.js",
